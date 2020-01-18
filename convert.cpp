@@ -1,3 +1,7 @@
+/*
+Copyright 2019 Andrey Petukhov
+*/
+
 #include <algorithm>
 #include <cstdio>
 #include <string>

@@ -1,3 +1,7 @@
+/*
+Copyright 2019 Andrey Petukhov
+*/
+
 #include <cstdio>
 #include <cerrno>
 #include "libsvm2csv.h"
