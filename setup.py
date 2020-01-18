@@ -6,7 +6,7 @@ from distutils.core import (
 mymodule = Extension(
     "libsvm2csv",
     sources = ["libsvm2csv.cpp", "convert.cpp"],
-    extra_compile_args=["-std=c++11"],
+    extra_compile_args=["-std=c++17"],
     language="c++",
 )
 

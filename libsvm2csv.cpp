@@ -22,6 +22,8 @@ static PyObject* wrapper_convert(PyObject *self, PyObject *args)
     }
 
     convert(fin, fout);
+    fclose(fin);
+    fclose(fout);
     Py_RETURN_NONE;
 }
 
