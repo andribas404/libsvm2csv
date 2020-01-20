@@ -121,6 +121,7 @@ void Converter::map_features() {
             if (!s.size()) {
                 continue;
             }
+            s.push_back(' ');
             vector<mytuple> parsed = parse_line(s);
             string buf = map_line(parsed, line_index++);
             fputs(buf.c_str(), fout);
