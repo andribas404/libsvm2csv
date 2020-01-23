@@ -18,12 +18,13 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="libsvm2csv",
-    version="0.1.1",
+    version="0.1.3",
     description="Convert LIBSVM data to csv format.",
     long_description=README,
     long_description_content_type="text/markdown",
     author="Andrey Petukhov",
     author_email="andribas404@gmail.com",
+    url="https://github.com/andribas404/libsvm2csv",
     ext_modules=[libsvm2csv_ext],
     license="MIT",
     classifiers=[
