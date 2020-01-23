@@ -1,5 +1,7 @@
 /*
+
 Copyright 2019 Andrey Petukhov
+
 */
 
 #include <algorithm>
