@@ -4,15 +4,15 @@
 
 `pip install libsvm2csv`
 
-### Преобразовывает формат LIBSVM в CSV
+### Convert LIBSVM format into CSV
 
 
 ```
 from libsvm2csv import convert
-convert("libsmv-data.txt", "data.csv")
+convert("libsvm-data.txt", "data.csv")
 ```
 
-`libsmv-data.txt`
+`libsvm-data.txt`
 
 ```
 1 qid:1 2:0.14  4:0.97  5:0.45

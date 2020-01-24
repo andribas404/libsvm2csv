@@ -23,16 +23,19 @@ const size_t MAX_SIZE = 100;
 class Converter {
  public:
     Converter(FILE* fin, FILE* fout);
-    ~Converter() {};
+    ~Converter() {}
     void convert();
 
-private:
+ private:
     string itoa(size_t n);
     vector<string> get_features();
     void map_features();
     vector<mytuple> parse_line(const string& s);
     string map_line(const vector<mytuple>& parsed, size_t line_index);
-    string join(const vector<string>& v, const string& delimiter, const string& end);
+    string join(
+        const vector<string>& v,
+        const string& delimiter,
+        const string& end);
 
     FILE* fin;
     FILE* fout;
@@ -50,7 +53,7 @@ Converter::Converter(FILE* fin, FILE* fout) :
 
 string Converter::itoa(size_t n) {
     char buf[MAX_SIZE];
-    sprintf(buf, "%ld", n);
+    snprintf(buf, MAX_SIZE, "%ld", n);
     string s(buf);
     return s;
 }
@@ -69,24 +72,32 @@ void Converter::convert() {
 vector<string> Converter::get_features() {
     string s;
     std::unordered_set<string> keys;
+    string terminal = "\r#\n";
+    bool skip = false;
 
     for (;;) {
         int c = fgetc(fin);
         if (c == EOF) {
             break;
         }
-        if (c < 32) {
-            if (!s.size()) {
-                continue;
+        if (skip) {
+            if (c == '\n') {
+                skip = false;
             }
+            continue;
+        }
+        if (terminal.find(c) != string::npos) {
             s.push_back(' ');
             vector<mytuple> parsed = parse_line(s);
             // +2 = skip target, qid
             for (auto it = parsed.cbegin() + 2; it < parsed.cend(); it++) {
-                auto [s1, s2] = *it;
+                auto[s1, s2] = *it;
                 keys.emplace(s1);
             }
             s.clear();
+            if (c != '\n') {
+                skip = true;
+            }
         } else {
             s.push_back(c);
         }
@@ -113,21 +124,29 @@ vector<string> Converter::get_features() {
 void Converter::map_features() {
     string s;
     size_t line_index = 0;
+    string terminal = "\r\n#";
+    bool skip = false;
 
     for (;;) {
         int c = fgetc(fin);
         if (c == EOF) {
             break;
         }
-        if (c < 32) {
-            if (!s.size()) {
-                continue;
+        if (skip) {
+            if (c == '\n') {
+                skip = false;
             }
+            continue;
+        }
+        if (terminal.find(c) != string::npos) {
             s.push_back(' ');
             vector<mytuple> parsed = parse_line(s);
             string buf = map_line(parsed, line_index++);
             fputs(buf.c_str(), fout);
             s.clear();
+            if (c != '\n') {
+                skip = true;
+            }
         } else {
             s.push_back(c);
         }
@@ -142,6 +161,7 @@ vector<mytuple> Converter::parse_line(const string& s) {
     for (size_t i = 0; i < s.size(); i++) {
         switch (s[i]) {
             case ' ':
+            case '\t':
                 if (right > left) {
                     string s1 = "";
                     string s2 = "";
@@ -174,7 +194,7 @@ string Converter::map_line(const vector<mytuple>& parsed, size_t line_index) {
     vector<string> v(features.size() + 1, "0");
     v[0] = itoa(line_index);
     // target
-    for (auto [feature, value] : parsed) {
+    for (auto[feature, value] : parsed) {
         size_t pos = features[feature];
         v[pos] = value;
     }
@@ -182,7 +202,10 @@ string Converter::map_line(const vector<mytuple>& parsed, size_t line_index) {
     return joined;
 }
 
-string Converter::join(const vector<string>& v, const string& delimiter, const string& end) {
+string Converter::join(
+    const vector<string>& v,
+    const string& delimiter,
+    const string& end) {
     string joined(v[0]);
     for (size_t i = 1; i < v.size(); i++) {
         joined.append(delimiter);

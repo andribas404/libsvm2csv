@@ -11,12 +11,11 @@ Copyright 2019 Andrey Petukhov
 
 #include "libsvm2csv.h"
 
-static PyObject* wrapper_convert(PyObject *self, PyObject *args)
-{
+static PyObject* wrapper_convert(PyObject *self, PyObject *args) {
     char *src, *dst;
 
     /* Parse arguments */
-    if(!PyArg_ParseTuple(args, "ss", &src, &dst)) {
+    if (!PyArg_ParseTuple(args, "ss", &src, &dst)) {
         Py_RETURN_NONE;
     }
 
@@ -34,7 +33,10 @@ static PyObject* wrapper_convert(PyObject *self, PyObject *args)
 }
 
 static PyMethodDef extMethods[] = {
-    { "convert", wrapper_convert, METH_VARARGS, "Python interface for C++ convert() function"},
+    { "convert",
+      wrapper_convert,
+      METH_VARARGS,
+      "Python interface for C++ convert() function" },
     { NULL, NULL, 0, NULL }
 };
 

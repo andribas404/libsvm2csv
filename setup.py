@@ -1,26 +1,31 @@
-
-import pathlib
-import setuptools
+import os
+import setuptools  # noqa: F401  used for build_wheel
 from distutils.core import (
     Extension,
     setup,
 )
 
+
+def get_readme():
+    BASE_DIR = os.path.dirname(__file__)
+    filename = os.path.join(BASE_DIR, "README.md")
+    with open(filename) as fin:
+        return fin.read()
+
+
 libsvm2csv_ext = Extension(
     "libsvm2csv",
-    sources = ["libsvm2csv.cpp", "convert.cpp"],
+    sources=["libsvm2csv.cpp", "convert.cpp"],
     extra_compile_args=["-std=c++17"],
     language="c++",
 )
 
-HERE = pathlib.Path(__file__).parent
-README = (HERE / "README.md").read_text()
 
 setup(
     name="libsvm2csv",
-    version="0.1.3",
+    version="0.1.4",
     description="Convert LIBSVM data to csv format.",
-    long_description=README,
+    long_description=get_readme(),
     long_description_content_type="text/markdown",
     author="Andrey Petukhov",
     author_email="andribas404@gmail.com",
@@ -30,7 +35,6 @@ setup(
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
     ],
 
 )
